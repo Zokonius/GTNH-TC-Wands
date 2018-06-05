@@ -1,0 +1,15 @@
+/.settings
+/asm
+/bin
+/config
+/crash-reports
+/logs
+/mods
+/resourcepacks
+/saves
+.classpath
+.project
+GregTech.cfg
+GregTech.lang
+options.txt
+usernamecache.json
