@@ -1,5 +1,9 @@
 package com.gtnewhorizons.wands;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -14,6 +18,8 @@ import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.wands.StaffRod;
 import thaumcraft.api.wands.WandCap;
 import thaumcraft.api.wands.WandRod;
+import thaumcraft.common.lib.crafting.ArcaneSceptreRecipe;
+import thaumcraft.common.lib.crafting.ArcaneWandRecipe;
 
 @Mod(modid="gtnhtcwands", name="GTNH-TC-Wands", version="1.0.0", dependencies=ThaumcraftWands.dependencies)
 public class ThaumcraftWands {
@@ -32,8 +38,11 @@ public class ThaumcraftWands {
 	@Instance
 	public static ThaumcraftWands instance = new ThaumcraftWands();
 
+
+
 	@EventHandler
 	public void postinit(FMLPostInitializationEvent e) {
+        removeTCWands();
 		setConstants();
 		makeWands();
 	}
@@ -134,7 +143,6 @@ public class ThaumcraftWands {
 		 for(String cap:caps)
 		  if((WandCap.caps.get(cap)!=null) && (getWandRod(rod)!=null)){
 				int meta = WandCap.caps.get(cap).getCraftCost()*getWandRod(rod).getCraftCost();
-				System.out.println(cap+ "-"+ rod);
 				ItemStack wand = GT_ModHandler.getModItem("Thaumcraft", "WandCasting", 1, meta);
 				NBTTagCompound nbt = new NBTTagCompound();
 				nbt.setString("rod", rod);
@@ -165,7 +173,7 @@ public class ThaumcraftWands {
 
 		 if(cap=="cloth")capcost=4;
 		 if(cap=="shadowcloth")capcost=6;
-		 if(cap=="bloodiron"||cap=="crimsoncloth"||cap=="thauminite")capcost=7;
+		 if(cap=="blood_iron"||cap=="crimsoncloth"||cap=="thauminite")capcost=7;
 		 if(rod=="livingwood"||rod=="dreamwood"||rod=="witchwood")rodcost=9;
 
 		if(rodcost<=3||rod=="AMBER") {
@@ -181,13 +189,13 @@ public class ThaumcraftWands {
 		if(rodcost==8||rodcost==9){
 			cost=75;
 			rodmod=15;
-			sceptremod=1.33F;
+			sceptremod=7*0.2F;
 		}
 
 		if(rodcost==10) {
 			cost=250;
 			rodmod=25;
-			sceptremod=1.2F;
+			sceptremod=6*0.2F;
 		}
 
 		if(rodcost==12||rodcost==14||rodcost==15) {
@@ -199,25 +207,25 @@ public class ThaumcraftWands {
 		if(rod=="bloodwood"||rodcost==24||rodcost==25) {
 			cost=150;
 		    rodmod= rod=="bloodwood" ? 20 : 15;
-			sceptremod=1.2F;
+			sceptremod=6*0.2F;
 		}
 
 		if(rodcost==16) {
 			cost= rod=="warpwood" ? 135 : 130;
 			rodmod=15;
-			sceptremod=7/6;
+			sceptremod=6*0.2F;
 		}
 
 		if(rodcost==20) {
 			cost=200;
 			rodmod=25;
-			sceptremod=1.25F;
+			sceptremod=6*0.2F;
 		}
 
 		if(rodcost>=27) {
 			cost=175;
 			rodmod=20;
-			sceptremod=1.66F;
+			sceptremod=8*0.2F;
 		}
 
 		for(int i=1;!(i==10);i++) {
@@ -236,18 +244,19 @@ public class ThaumcraftWands {
 	private static Object[] getRecipe(String rod, String cap, boolean sceptre) {
 		ItemStack core;
 		if(rod.contains("_staff"))core = StaffRod.rods.get(rod).getItem();
+		else if(rod=="wood"&&Loader.isModLoaded("Forestry")) core = GT_ModHandler.getModItem("Forestry", "oakStick", 1);
 		else core = WandRod.rods.get(rod).getItem();
 		if(!sceptre)
 			return new Object[] {
 				"MSC","SRS","CSM",
-				Character.valueOf('M'), getConductorfromName(rod), Character.valueOf('C'), getGTWandCap(cap),
+				Character.valueOf('M'), getConductorfromName(rod), Character.valueOf('C'), WandCap.caps.get(cap).getItem(),
 				Character.valueOf('S'), getScrewfromName(rod), Character.valueOf('R'),core
 		};
 
 		else
 			return new Object[] {
 				"MCP","SRC","CSM",
-				Character.valueOf('M'), getConductorfromName(rod), Character.valueOf('C'), getGTWandCap(cap),
+				Character.valueOf('M'), getConductorfromName(rod), Character.valueOf('C'), WandCap.caps.get(cap).getItem(),
 				Character.valueOf('P'), GT_ModHandler.getModItem("Thaumcraft", "ItemResource", 1, 15),
 				Character.valueOf('S'), getScrewfromName(rod), Character.valueOf('R'),core
 		};
@@ -303,33 +312,21 @@ public class ThaumcraftWands {
 		else return WandRod.rods.get(s);
 	}
 
-	private static ItemStack getGTWandCap(String s) {
-		String n=null;
-		switch(s){
-		default:
-		case "iron":n="item.IronWandCap";break;
-		case "copper":n="item.CopperWandCap";break;
-		case "gold":n="item.GoldWandCap";break;
-		case "silver":n="item.ChargedSilverWandCap";break;
-		case "thaumium":n="item.ChargedThaumiumWandCap";break;
-		case "void":n="item.ChargedVoidWandCap";break;
-		case "ICHOR":n="item.IchoriumCap";break;
-		case "alchemical":n="item.WandCapAlchemical";break;
-		case "blood_iron":n="item.WandCapBloodIron";break;
-		case "cloth":n="item.EnchantedClothCap";break;
-		case "crimsoncloth":n="item.CrimsonStainedClothCap";break;
-		case "shadowcloth":n="item.ShadowImbuedClothCap";break;
-		case "shadowmetal":n="item.ShadowmetalCap";break;
-		case "thauminite":n="item.WandCapThauminite";break;
-		case "manasteel":n="item.WandCapManaSteel";break;
-		case "terrasteel":n="item.WandCapTerraSteel";break;
-		case "elementium":n="item.WandCapElementium";break;
-		case "vinteum":n="item.WandCapVinteum";break;
-		case "SOJOURNER":n="item.ChargedSojournerWandCap";break;
-		case "MECHANIST":n="item.ChargedMechanistWandCap";break;
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private static void removeTCWands() {
+		ArrayList li = null,lo = new ArrayList<>();
+		try {
+         Field f = ThaumcraftApi.class.getDeclaredField("craftingRecipes");
+         f.setAccessible(true);
+         li = (ArrayList) f.get(ArrayList.class);
+         for(int i=0;!(i==li.size());i++)
+        	 if(!(li.get(i) instanceof ArcaneWandRecipe||li.get(i) instanceof ArcaneSceptreRecipe))
+              lo.add(li.get(i));
+         f.set(ArrayList.class, lo);
 		}
-		return GT_ModHandler.getModItem("dreamcraft", n, 1);
-	}
-
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		}
 
 }

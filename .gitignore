@@ -1,4 +1,5 @@
 /.settings
+/.gradle
 /asm
 /bin
 /config
