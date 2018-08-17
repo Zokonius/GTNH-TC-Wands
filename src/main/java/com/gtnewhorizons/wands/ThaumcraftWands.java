@@ -11,17 +11,17 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import gregtech.api.util.GT_ModHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.oredict.OreDictionary;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
+import thaumcraft.api.crafting.IArcaneRecipe;
 import thaumcraft.api.wands.StaffRod;
 import thaumcraft.api.wands.WandCap;
 import thaumcraft.api.wands.WandRod;
 import thaumcraft.common.lib.crafting.ArcaneSceptreRecipe;
 import thaumcraft.common.lib.crafting.ArcaneWandRecipe;
 
-@Mod(modid="gtnhtcwands", name="GTNH-TC-Wands", version="1.0.0", dependencies=ThaumcraftWands.dependencies)
+@Mod(modid="gtnhtcwands", name="GTNH-TC-Wands", version="1.0.1", dependencies=ThaumcraftWands.dependencies)
 public class ThaumcraftWands {
 
 	final static String dependencies=
@@ -37,8 +37,6 @@ public class ThaumcraftWands {
 	                         +"after:ThaumicTinkerer;";
 	@Instance
 	public static ThaumcraftWands instance = new ThaumcraftWands();
-
-
 
 	@EventHandler
 	public void postinit(FMLPostInitializationEvent e) {
@@ -56,17 +54,6 @@ public class ThaumcraftWands {
 				GT_ModHandler.getModItem("TwilightForest", "item.carminite", 1),
 				GT_ModHandler.getModItem("dreamcraft", "item.SnowQueenBlood", 1)
 			};
-
-		screw = new ItemStack[]{
-				   OreDictionary.getOres("screwAluminium").get(0),
-				   OreDictionary.getOres("screwStainlessSteel").get(0),
-				   OreDictionary.getOres("screwTitanium").get(0),
-				   OreDictionary.getOres("screwTungstenSteel").get(0),
-				   OreDictionary.getOres("screwChrome").get(0),
-				   OreDictionary.getOres("screwIridium").get(0),
-				   OreDictionary.getOres("screwOsmium").get(0),
-				};
-
 	}
 
 	final static String[] cores = new String[]{
@@ -106,7 +93,8 @@ public class ThaumcraftWands {
 			"TRANSMUTATION",
 			"TRANSMUTATION_staff",
 			"warpwood",
-			"warpwood_staff"
+			"warpwood_staff",
+			"BREAD"
 	};
 
 	final static String[] caps = new String[]{
@@ -134,8 +122,14 @@ public class ThaumcraftWands {
 
 	static ItemStack[] conductor = null;
 
-    static	ItemStack[] screw = null;
-
+     static final String[] screw = new String[]{
+            "screwAluminium",
+            "screwStainlessSteel","screwTitanium",
+		    "screwTungstenSteel",
+	        "screwChrome",
+            "screwIridium",
+            "screwOsmium"
+	};
 
 
 	public static void makeWands(){
@@ -153,6 +147,11 @@ public class ThaumcraftWands {
 				for(Aspect a:Aspect.getPrimalAspects())
 				list.add(a, getVisCost(rod, cap, false));
 
+				if(rod == "warpwood")
+				ThaumcraftApi.addArcaneCraftingRecipe("RoD_WarpwoodGTNH", wand, list, getRecipe(rod, cap, false));
+				else if(rod == "warpwood_staff")
+				ThaumcraftApi.addArcaneCraftingRecipe("RoD_Warpwood_StaffGTNH"+rod, wand, list, getRecipe(rod, cap, false));
+				else
 				ThaumcraftApi.addArcaneCraftingRecipe("ROD_"+rod, wand, list, getRecipe(rod, cap, false));
 
 				list = new AspectList();
@@ -174,9 +173,10 @@ public class ThaumcraftWands {
 		 if(cap=="cloth")capcost=4;
 		 if(cap=="shadowcloth")capcost=6;
 		 if(cap=="blood_iron"||cap=="crimsoncloth"||cap=="thauminite")capcost=7;
+		 if(rod== "BREAD")rodcost = 3;
 		 if(rod=="livingwood"||rod=="dreamwood"||rod=="witchwood")rodcost=9;
 
-		if(rodcost<=3||rod=="AMBER") {
+		if(rodcost<=3||rod=="AMBER"||rod=="BREAD") {
 			 cost= rod=="wood" ? 0 : 20;
 		}
 
@@ -245,6 +245,7 @@ public class ThaumcraftWands {
 		ItemStack core;
 		if(rod.contains("_staff"))core = StaffRod.rods.get(rod).getItem();
 		else if(rod=="wood"&&Loader.isModLoaded("Forestry")) core = GT_ModHandler.getModItem("Forestry", "oakStick", 1);
+		//else if(rod=="BREAD")core = GT_ModHandler.getModItem("gregtech", "gt.metaitem.02", 1, 32565);
 		else core = WandRod.rods.get(rod).getItem();
 		if(!sceptre)
 			return new Object[] {
@@ -262,7 +263,7 @@ public class ThaumcraftWands {
 		};
 	}
 
-	private static ItemStack getScrewfromName(String s){
+	private static String getScrewfromName(String s){
 		int capacity;
 		if(s=="wood")return screw[0];
 
@@ -312,21 +313,17 @@ public class ThaumcraftWands {
 		else return WandRod.rods.get(s);
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private static void removeTCWands() {
-		ArrayList li = null,lo = new ArrayList<>();
+		ArrayList<IArcaneRecipe> l = new ArrayList<IArcaneRecipe>();
 		try {
-         Field f = ThaumcraftApi.class.getDeclaredField("craftingRecipes");
-         f.setAccessible(true);
-         li = (ArrayList) f.get(ArrayList.class);
-         for(int i=0;!(i==li.size());i++)
-        	 if(!(li.get(i) instanceof ArcaneWandRecipe||li.get(i) instanceof ArcaneSceptreRecipe))
-              lo.add(li.get(i));
-         f.set(ArrayList.class, lo);
+          Field f = ThaumcraftApi.class.getDeclaredField("craftingRecipes");
+          f.setAccessible(true);
+          for(IArcaneRecipe r: (ArrayList<IArcaneRecipe>) f.get(ArrayList.class))
+           if(!(r instanceof ArcaneWandRecipe||r instanceof ArcaneSceptreRecipe))
+            l.add(r);
+          f.set(ArrayList.class, l);
 		}
-		catch(Exception e) {
-			e.printStackTrace();
-		}
+		catch(Exception e) {}
 		}
 
 }
