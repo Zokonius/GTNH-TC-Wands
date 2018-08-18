@@ -3,8 +3,6 @@ package com.gtnewhorizons.wands;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
-import com.gtnewhorizons.wands.nei.NEI;
-
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
