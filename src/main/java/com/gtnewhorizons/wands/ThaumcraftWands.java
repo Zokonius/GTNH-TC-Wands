@@ -3,6 +3,8 @@ package com.gtnewhorizons.wands;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
+import com.gtnewhorizons.wands.nei.NEI;
+
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -21,7 +23,7 @@ import thaumcraft.api.wands.WandRod;
 import thaumcraft.common.lib.crafting.ArcaneSceptreRecipe;
 import thaumcraft.common.lib.crafting.ArcaneWandRecipe;
 
-@Mod(modid="gtnhtcwands", name="GTNH-TC-Wands", version="1.0.1", dependencies=ThaumcraftWands.dependencies)
+@Mod(modid="gtnhtcwands", name="GTNH-TC-Wands", version="1.0.2", dependencies=ThaumcraftWands.dependencies)
 public class ThaumcraftWands {
 
 	final static String dependencies=
@@ -53,6 +55,7 @@ public class ThaumcraftWands {
 				GT_ModHandler.getModItem("TwilightForest", "item.fieryTears", 1),
 				GT_ModHandler.getModItem("TwilightForest", "item.carminite", 1),
 				GT_ModHandler.getModItem("dreamcraft", "item.SnowQueenBlood", 1)
+
 			};
 	}
 
@@ -314,14 +317,15 @@ public class ThaumcraftWands {
 	}
 
 	private static void removeTCWands() {
-		ArrayList<IArcaneRecipe> l = new ArrayList<IArcaneRecipe>();
+		ArrayList<IArcaneRecipe> l1 = new ArrayList<IArcaneRecipe>();
 		try {
           Field f = ThaumcraftApi.class.getDeclaredField("craftingRecipes");
           f.setAccessible(true);
-          for(IArcaneRecipe r: (ArrayList<IArcaneRecipe>) f.get(ArrayList.class))
+          ArrayList<IArcaneRecipe> l2 = (ArrayList<IArcaneRecipe>) f.get(ArrayList.class);
+          for(IArcaneRecipe r: l2)
            if(!(r instanceof ArcaneWandRecipe||r instanceof ArcaneSceptreRecipe))
-            l.add(r);
-          f.set(ArrayList.class, l);
+            l1.add(r);
+          f.set(ArrayList.class, l1);
 		}
 		catch(Exception e) {}
 		}
