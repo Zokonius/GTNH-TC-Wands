@@ -24,7 +24,7 @@ import thaumcraft.api.wands.WandRod;
 import thaumcraft.common.lib.crafting.ArcaneSceptreRecipe;
 import thaumcraft.common.lib.crafting.ArcaneWandRecipe;
 
-@Mod(modid="gtnhtcwands", name="GTNH-TC-Wands", version="1.0.2", dependencies=ThaumcraftWands.dependencies)
+@Mod(modid="gtnhtcwands", name="GTNH-TC-Wands", version="1.0.3", dependencies=ThaumcraftWands.dependencies)
 public class ThaumcraftWands {
 
 	final static String dependencies=
