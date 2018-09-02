@@ -2,8 +2,7 @@ package com.gtnewhorizons.wands;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-
-import com.gtnewhorizons.wands.nei.NEI;
+import java.util.List;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
@@ -11,8 +10,10 @@ import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import gregtech.api.util.GT_ModHandler;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
@@ -43,18 +44,22 @@ public class ThaumcraftWands {
 	@EventHandler
 	public void postinit(FMLPostInitializationEvent e) {
         removeTCWands();
+        addWandParts();
 		setConstants();
 		makeWands();
 	}
+
 
 	private void setConstants() {
 		conductor = new ItemStack[]{
 				GT_ModHandler.getModItem("TwilightForest", "item.nagaScale", 1),
 				GT_ModHandler.getModItem("dreamcraft", "item.LichBone", 1),
+				//new ItemStack(Items.apple),
 				GT_ModHandler.getModItem("TwilightForest", "item.fieryBlood", 1),
 				GT_ModHandler.getModItem("TwilightForest", "item.fieryTears", 1),
 				GT_ModHandler.getModItem("TwilightForest", "item.carminite", 1),
 				GT_ModHandler.getModItem("dreamcraft", "item.SnowQueenBlood", 1)
+				//new ItemStack(Items.apple)
 
 			};
 	}
@@ -127,12 +132,19 @@ public class ThaumcraftWands {
 
      static final String[] screw = new String[]{
             "screwAluminium",
-            "screwStainlessSteel","screwTitanium",
+            "screwStainlessSteel",
+            "screwTitanium",
 		    "screwTungstenSteel",
 	        "screwChrome",
             "screwIridium",
             "screwOsmium"
 	};
+
+ 	private void addWandParts() {
+		makeCap(GT_ModHandler.getModItem("TaintedMagic", "ItemWandCap", 1, 3), "shadowcloth", 0.85F, 7, new ResourceLocation("taintedmagic", "textures/models/ModelWAND_CAP_SHADOW_CLOTH.png"));
+		makeCap(GT_ModHandler.getModItem("TaintedMagic", "ItemWandCap", 1, 2), "crimsoncloth", 0.80F, 9, new ResourceLocation("taintedmagic", "textures/models/ModelWAND_CAP_CRIMSON_CLOTH.png"));
+
+ 	}
 
 
 	public static void makeWands(){
@@ -314,6 +326,18 @@ public class ThaumcraftWands {
 	private static WandRod getWandRod(String s) {
 		if(s.contains("_staff"))return StaffRod.rods.get(s);
 		else return WandRod.rods.get(s);
+	}
+
+	private static void makeCap(ItemStack stack, String name, float discount, int cost, ResourceLocation res) {
+		WandCap c = new WandCap(name, discount, stack, cost);
+		c.setTexture(res);
+		WandCap.caps.put(name,c);
+	}
+
+	private static void makeCap(ItemStack stack, String name, float discount,List<Aspect> list, float discountSpecial, int cost, ResourceLocation res) {
+		WandCap c = new WandCap(name, discount, list, discountSpecial, stack, cost);
+		c.setTexture(res);
+		WandCap.caps.put(name,c);
 	}
 
 	private static void removeTCWands() {
