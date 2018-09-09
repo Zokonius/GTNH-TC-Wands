@@ -17,9 +17,9 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "1.0.2"
+version = "1.0.3"
 group= "com.gtnewhorizons.wands" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "wands"
+archivesBaseName = "GTNH-TC-Wands"
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
