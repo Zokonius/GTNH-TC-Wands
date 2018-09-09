@@ -26,13 +26,13 @@ import thaumcraft.api.wands.WandRod;
 import thaumcraft.common.lib.crafting.ArcaneSceptreRecipe;
 import thaumcraft.common.lib.crafting.ArcaneWandRecipe;
 
-@Mod(modid="gtnhtcwands", name="GTNH-TC-Wands", version="1.0.2", dependencies=ThaumcraftWands.dependencies)
+@Mod(modid="gtnhtcwands", name="GTNH-TC-Wands", version="1.0.4", dependencies=ThaumcraftWands.dependencies)
 public class ThaumcraftWands {
 
 	final static String dependencies=
-			                  "required-after:Thaumcraft;"
-	                         //+"required-after:dreamcraft;"
-			                 +"required-after:gregtech;"
+			          "required-after:Thaumcraft;"
+	                         +"required-after:dreamcraft;"
+			         +"required-after:gregtech;"
 	                         +"required-after:TwilightForest;"
 	                         +"after:ForbiddenMagic;"
 	                         +"after:TaintedMagic;"
@@ -343,17 +343,17 @@ public class ThaumcraftWands {
 	}
 
 	private static void removeTCWands() {
-		ArrayList<Object> l1 = new ArrayList<Object>();
-		try {
-          Field f = ThaumcraftApi.class.getDeclaredField("craftingRecipes");
-          f.setAccessible(true);
-          ArrayList<Object> l2 = (ArrayList) f.get(ArrayList.class);
-          for(Object r: l2)
-           if(!(r instanceof ArcaneWandRecipe||r instanceof ArcaneSceptreRecipe))
-            l1.add(r);
-          f.set(ArrayList.class, l1);
-		}
-		catch(Exception e) {}
-		}
+	  ArrayList<Object> l1 = new ArrayList<Object>();
+	  try {
+           Field f = ThaumcraftApi.class.getDeclaredField("craftingRecipes");
+           f.setAccessible(true);
+           ArrayList<Object> l2 = (ArrayList) f.get(ArrayList.class);
+           for(Object r: l2)
+            if(!(r instanceof ArcaneWandRecipe||r instanceof ArcaneSceptreRecipe))
+             l1.add(r);
+           f.set(ArrayList.class, l1);
+	   }
+	   catch(Exception e) {}
+	}
 
 }
