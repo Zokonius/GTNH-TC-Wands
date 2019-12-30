@@ -246,7 +246,6 @@ public class ThaumcraftWands {
 		thaumcraft.api.wands.WandCap.caps.put(name,c);
 	}
 
-
 	public static void removeTCWands() {
 		ArrayList<Object> l1 = new ArrayList<Object>();
 		try {
