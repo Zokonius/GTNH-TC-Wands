@@ -24,17 +24,16 @@ import thaumcraft.common.lib.crafting.ArcaneWandRecipe;
 @Mod(modid="gtnhtcwands", name="GTNH-TC-Wands", version="1.0.2", dependencies=ThaumcraftWands.dependencies)
 public class ThaumcraftWands {
 
-	final static String dependencies=
-			                  "required-after:Thaumcraft;"
-	                         +"required-after:dreamcraft;"
-			                 +"required-after:gregtech;"
-	                         +"required-after:TwilightForest;"
-	                         +"after:ForbiddenMagic;"
-	                         +"after:TaintedMagic;"
-	                         +"after:BloodArsenal;"
-	                         +"after:thaumicbases;"
-	                         +"after:ThaumicExploration;"
-	                         +"after:ThaumicTinkerer;";
+	final static String dependencies="required-after:Thaumcraft;"
+									+"required-after:dreamcraft;"
+									+"required-after:gregtech;"
+									+"required-after:TwilightForest;"
+									+"after:ForbiddenMagic;"
+									+"after:TaintedMagic;"
+									+"after:BloodArsenal;"
+									+"after:thaumicbases;"
+									+"after:ThaumicExploration;"
+									+"after:ThaumicTinkerer;";
 
 	static final int LV  = 1,
 			         MV  = 2,
@@ -75,6 +74,8 @@ public class ThaumcraftWands {
 		cores.add(new WandCore("silverwood_staff", LUV, CARMINITE, 150, 15 , 1.2F));
 		cores.add(new WandCore("primal_staff", ZPM, CARMINITE, 175, 20, 1.6F));
 
+		cores.add(new WandCore("profane", HV, LICH, 25, 5, 2F));
+		cores.add(new WandCore("tainted", IV, GHAST, 125, 15, 1.5F));
 		cores.add(new WandCore("blood", IV, GHAST, 125, 15, 1.5F));
 		cores.add(new WandCore("blood_staff", LUV, CARMINITE, 150, 15, 1.2F));
 		cores.add(new WandCore("infernal", IV, GHAST, 125, 15, 1.5F));
@@ -142,11 +143,14 @@ public class ThaumcraftWands {
 	}
 
 	public void addWandParts() {
-		makeCap(GT_ModHandler.getModItem("TaintedMagic", "ItemWandCap", 1, 3), "shadowcloth", 0.85F, 7, new ResourceLocation("taintedmagic", "textures/models/ModelWAND_CAP_SHADOW_CLOTH.png"));
-		makeCap(GT_ModHandler.getModItem("TaintedMagic", "ItemWandCap", 1, 2), "crimsoncloth", 0.80F, 9, new ResourceLocation("taintedmagic", "textures/models/ModelWAND_CAP_CRIMSON_CLOTH.png"));
 
-		//makeRod("ledox", 300, new ItemStack(Items.carrot), 10, null, true, new ResourceLocation("gtnh","textures"));
-		//makeCap(new ItemStack(Items.baked_potato), "enderium", 0.99F, 12, new ResourceLocation(""));
+		// Override Tainted Magic Caps
+		makeCap("shadowcloth", GT_ModHandler.getModItem("TaintedMagic", "ItemWandCap", 1, 3), 0.85F, 7, new ResourceLocation("taintedmagic", "textures/models/ModelWAND_CAP_SHADOW_CLOTH.png"));
+		makeCap("crimsoncloth", GT_ModHandler.getModItem("TaintedMagic", "ItemWandCap", 1, 2), 0.80F, 9, new ResourceLocation("taintedmagic", "textures/models/ModelWAND_CAP_CRIMSON_CLOTH.png"));
+
+		//Example Rods and Caps
+	//	makeRod("ledox", 300, new ItemStack(Items.carrot), 10, null, true, new ResourceLocation("gtnh","textures"));
+	//	makeCap(new ItemStack(Items.baked_potato), "enderium", 0.99F, 12, new ResourceLocation(""));
 
  	}
 
@@ -230,13 +234,13 @@ public class ThaumcraftWands {
 		StaffRod.rods.put(name, r);
 	}
 
-	public static void makeCap(ItemStack stack, String name, float discount, int cost, ResourceLocation res) {
+	public static void makeCap(String name, ItemStack stack, float discount, int cost, ResourceLocation res) {
 		thaumcraft.api.wands.WandCap c = new thaumcraft.api.wands.WandCap(name, discount, stack, cost);
 		c.setTexture(res);
 		thaumcraft.api.wands.WandCap.caps.put(name,c);
 	}
 
-	public static void makeCap(ItemStack stack, String name, float discount,List<Aspect> list, float discountSpecial, int cost, ResourceLocation res) {
+	public static void makeCap(String name, ItemStack stack, float discount,List<Aspect> list, float discountSpecial, int cost, ResourceLocation res) {
 		thaumcraft.api.wands.WandCap c = new thaumcraft.api.wands.WandCap(name, discount, list, discountSpecial, stack, cost);
 		c.setTexture(res);
 		thaumcraft.api.wands.WandCap.caps.put(name,c);
