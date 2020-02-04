@@ -44,12 +44,7 @@ public class ThaumcraftWands {
 			         ZPM = 7,
 			         UV  = 8;
 
-	static ItemStack NAGA = GT_ModHandler.getModItem("TwilightForest", "item.nagaScale", 1, 0, new ItemStack(Items.wheat)),
-				     LICH = GT_ModHandler.getModItem("dreamcraft", "item.LichBone", 1, 0, new ItemStack(Items.carrot)),
-				     HYDRA = GT_ModHandler.getModItem("TwilightForest", "item.fieryBlood", 1, 0, new ItemStack(Items.potato)),
-				     GHAST = GT_ModHandler.getModItem("TwilightForest", "item.fieryTears", 1, 0, new ItemStack(Items.poisonous_potato)),
-				     CARMINITE = GT_ModHandler.getModItem("TwilightForest", "item.carminite", 1, 0, new ItemStack(Items.apple)),
-				     QUEEN = GT_ModHandler.getModItem("dreamcraft", "item.SnowQueenBlood", 1,0, new ItemStack(Items.cake));
+
 
 	public static ArrayList<WandCore> cores = new ArrayList<>();
 	public static ArrayList<WandCap> caps = new ArrayList<>();
@@ -64,6 +59,13 @@ public class ThaumcraftWands {
 	}
 
 	public static void setupWandParts() {
+
+	   ItemStack NAGA = GT_ModHandler.getModItem("TwilightForest", "item.nagaScale", 1, 0, new ItemStack(Items.wheat)),
+			     LICH = GT_ModHandler.getModItem("dreamcraft", "item.LichBone", 1, 0, new ItemStack(Items.carrot)),
+			     HYDRA = GT_ModHandler.getModItem("TwilightForest", "item.fieryBlood", 1, 0, new ItemStack(Items.potato)),
+			     GHAST = GT_ModHandler.getModItem("TwilightForest", "item.fieryTears", 1, 0, new ItemStack(Items.poisonous_potato)),
+			     CARMINITE = GT_ModHandler.getModItem("TwilightForest", "item.carminite", 1, 0, new ItemStack(Items.apple)),
+			     QUEEN = GT_ModHandler.getModItem("dreamcraft", "item.SnowQueenBlood", 1,0, new ItemStack(Items.cake));
 
 		cores.add(new WandCore("wood", GT_ModHandler.getModItem("Forestry", "oakStick", 1, 0, new ItemStack(Items.stick)), MV, NAGA, 0, 5, 2F));
 		cores.add(new WandCore("greatwood", HV, LICH, 20, 5, 2F));
