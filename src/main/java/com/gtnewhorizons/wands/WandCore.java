@@ -17,15 +17,15 @@ public class WandCore {
 
 
 	public WandCore(String name, int tier, ItemStack conductor, int baseCost, int capCost, float sceptreCost) {
-      new WandCore(name, Tier.ELECTRIC[tier].getMaterial(), conductor, baseCost, capCost, sceptreCost);
+      this(name, Tier.ELECTRIC[tier].getMaterial(), conductor, baseCost, capCost, sceptreCost);
 	}
 
 	public WandCore(String name, ItemStack rod, int tier, ItemStack conductor, int baseCost, int capCost, float sceptreCost) {
-	      new WandCore(name, rod, Tier.ELECTRIC[tier].getMaterial(), conductor, baseCost, capCost, sceptreCost);
+	      this(name, rod, Tier.ELECTRIC[tier].getMaterial(), conductor, baseCost, capCost, sceptreCost);
 		}
 
 	public WandCore(String name, Materials material, ItemStack conductor, int baseCost, int capCost, float sceptreCost) {
-	 new WandCore(name, name.contains("_staff") ? StaffRod.rods.get(name).getItem():WandRod.rods.get(name).getItem(), material, conductor, baseCost, capCost, sceptreCost);
+	 this(name, name.contains("_staff") ? StaffRod.rods.get(name).getItem():WandRod.rods.get(name).getItem(), material, conductor, baseCost, capCost, sceptreCost);
 	}
 
 	public WandCore(String name, ItemStack rod, Materials material, ItemStack conductor, int baseCost, int capCost, float sceptreCost) {
