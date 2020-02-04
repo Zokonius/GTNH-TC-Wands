@@ -4,12 +4,13 @@ import net.minecraft.item.ItemStack;
 
 public class WandCap {
 
+
 	int capCost;
 	String name;
     ItemStack itemStack;
 
 	public WandCap(String name, int capCost) {
-	 new WandCap(name, thaumcraft.api.wands.WandCap.caps.get(name).getItem(), capCost);
+	  this(name, thaumcraft.api.wands.WandCap.caps.get(name).getItem(), capCost);
       this.name = name;
       this.capCost = capCost;
 	}

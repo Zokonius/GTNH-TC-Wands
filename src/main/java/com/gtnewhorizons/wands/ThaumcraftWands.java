@@ -6,7 +6,9 @@ import java.util.List;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import gregtech.api.util.GT_ModHandler;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -24,36 +26,25 @@ import thaumcraft.common.lib.crafting.ArcaneWandRecipe;
 @Mod(modid="gtnhtcwands", name="GTNH-TC-Wands", version="1.0.2", dependencies=ThaumcraftWands.dependencies)
 public class ThaumcraftWands {
 
-	final static String dependencies="required-after:Thaumcraft;"
-									+"required-after:dreamcraft;"
-									+"required-after:gregtech;"
-									+"required-after:TwilightForest;"
-									+"after:ForbiddenMagic;"
-									+"after:TaintedMagic;"
-									+"after:BloodArsenal;"
-									+"after:thaumicbases;"
-									+"after:ThaumicExploration;"
-									+"after:ThaumicTinkerer;";
+	final static String dependencies = "required-after:Thaumcraft;"
+									  +"required-after:dreamcraft;"
+									  +"required-after:gregtech;"
+									  +"required-after:TwilightForest;"
+									  +"after:ForbiddenMagic;"
+									  +"after:TaintedMagic;"
+									  +"after:BloodArsenal;"
+									  +"after:thaumicbases;"
+									  +"after:ThaumicExploration;"
+									  +"after:ThaumicTinkerer;";
 
-	static final int LV  = 1,
-			         MV  = 2,
-			         HV  = 3,
-			         EV  = 4,
-			         IV  = 5,
-			         LUV = 6,
-			         ZPM = 7,
-			         UV  = 8;
 
-	static ItemStack NAGA = GT_ModHandler.getModItem("TwilightForest", "item.nagaScale", 1, 0, new ItemStack(Items.wheat)),
-				     LICH = GT_ModHandler.getModItem("dreamcraft", "item.LichBone", 1, 0, new ItemStack(Items.carrot)),
-				     HYDRA = GT_ModHandler.getModItem("TwilightForest", "item.fieryBlood", 1, 0, new ItemStack(Items.potato)),
-				     GHAST = GT_ModHandler.getModItem("TwilightForest", "item.fieryTears", 1, 0, new ItemStack(Items.poisonous_potato)),
-				     CARMINITE = GT_ModHandler.getModItem("TwilightForest", "item.carminite", 1, 0, new ItemStack(Items.apple)),
-				     QUEEN = GT_ModHandler.getModItem("dreamcraft", "item.SnowQueenBlood", 1,0, new ItemStack(Items.cake));
+	public void preInit(FMLPreInitializationEvent e){
 
-	public static ArrayList<WandCore> cores = new ArrayList<>();
-	public static ArrayList<WandCap> caps = new ArrayList<>();
+	}
 
+	public void init(FMLInitializationEvent e) {
+
+	}
 
 	@EventHandler
 	public void postinit(FMLPostInitializationEvent e) {
@@ -194,59 +185,13 @@ public class ThaumcraftWands {
 		}
 	}
 
-	public static Object[] getRecipe(WandCore rod, WandCap cap, boolean sceptre) {
-		if(sceptre) return new Object[] {
-				"MCP",
-				"SRC",
-				"CSM",
-				Character.valueOf('R'), rod.getItem(),
-				Character.valueOf('M'), rod.getConductor(),
-				Character.valueOf('S'), rod.getScrew(),
-				Character.valueOf('C'), cap.getItem(),
-				Character.valueOf('P'), GT_ModHandler.getModItem("Thaumcraft", "ItemResource", 1, 15, new ItemStack(Items.sugar))
-		};
 
-		else return new Object[] {
-				"MSC",
-				"SRS",
-				"CSM",
-				Character.valueOf('R'), rod.getItem(),
-				Character.valueOf('M'), rod.getConductor(),
-				Character.valueOf('S'), rod.getScrew(),
-				Character.valueOf('C'), cap.getItem()
-		};
-	}
 
 	public static int getCost(WandCore core, WandCap cap, boolean sceptre){
 		int cost = core.getBaseCost()+core.getCapCost()*cap.getCapCost();
 		return (int) (sceptre ? cost:cost*core.getSceptreCost());
 	}
 
-	public static void makeRod(String name,int capacity, ItemStack item, int cost, IWandRodOnUpdate update, boolean glowing, ResourceLocation texture) {
-		WandRod r = new WandRod(name, capacity, item, cost, texture);
-		r.setGlowing(glowing);
-		if(update!=null) r.setOnUpdate(update);
-		WandRod.rods.put(name, r);
-	}
-
-	public static void makeStaff(String name,int capacity, ItemStack item, int cost, IWandRodOnUpdate update, boolean glowing, ResourceLocation texture) {
-		StaffRod r = new StaffRod(name, capacity, item, cost, texture);
-		r.setGlowing(glowing);
-		if(update!=null) r.setOnUpdate(update);
-		StaffRod.rods.put(name, r);
-	}
-
-	public static void makeCap(String name, ItemStack stack, float discount, int cost, ResourceLocation res) {
-		thaumcraft.api.wands.WandCap c = new thaumcraft.api.wands.WandCap(name, discount, stack, cost);
-		c.setTexture(res);
-		thaumcraft.api.wands.WandCap.caps.put(name,c);
-	}
-
-	public static void makeCap(String name, ItemStack stack, float discount,List<Aspect> list, float discountSpecial, int cost, ResourceLocation res) {
-		thaumcraft.api.wands.WandCap c = new thaumcraft.api.wands.WandCap(name, discount, list, discountSpecial, stack, cost);
-		c.setTexture(res);
-		thaumcraft.api.wands.WandCap.caps.put(name,c);
-	}
 
 	public static void removeTCWands() {
 		ArrayList<Object> l1 = new ArrayList<Object>();
